@@ -16,8 +16,8 @@ class FKGLScorer:
         self.nb_syllables = 0
         self.nb_sentences = 0
 
-    def add(self, text):
-        for sentence in to_sentences(text):
+    def add(self, text, language="english"):
+        for sentence in to_sentences(text, language=language):
             self.nb_words += count_words(sentence)
             self.nb_syllables += count_syllables_in_sentence(sentence)
             self.nb_sentences += 1
@@ -32,8 +32,10 @@ class FKGLScorer:
         )
 
 
-def corpus_fkgl(sentences: List[str], tokenizer: str = "13a"):
+def corpus_fkgl(sentences: List[str], tokenizer: str = "13a",
+                language: str = "english"):
     scorer = FKGLScorer()
     for sentence in sentences:
-        scorer.add(normalize(sentence, tokenizer=tokenizer))
+        scorer.add(normalize(sentence, tokenizer=tokenizer),
+                   language=language)
     return scorer.score()
